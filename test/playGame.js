@@ -4,6 +4,7 @@ var expect = require("chai").expect,
     request = require('supertest'),
     redis = require('redis'),
     client = redis.createClient();
+var config = require('../config')
 
 var app = require("../app");
 var p1Key, p2Key, boardID;
@@ -99,7 +100,7 @@ describe('Make move |', function () {
                 expect(b.p1Key).to.be.undefined;
                 expect(b.p2Key).to.be.undefined;
                 expect(b.turn).to.equal(2);
-                expect(b.board[7]).to.equal('x');
+                expect(b.board[0]).to.equal('x');
                 done();
             });
     });
@@ -117,7 +118,7 @@ describe('Make move |', function () {
 
     it('Player 2 can move same player 1', function (done) {
         request(app).put('/board/' + boardID)
-            .set('X-Player-Token', p1Key)
+            .set('X-Player-Token', p2Key)
             .send({column: 1, row: 1})
             .expect(400)
             .end(function (err, res) {
@@ -136,7 +137,7 @@ describe('Make move |', function () {
                 expect(b.p1Key).to.be.undefined;
                 expect(b.p2Key).to.be.undefined;
                 expect(b.turn).to.equal(3);
-                expect(b.board[8]).to.equal('o');
+                expect(b.board[6]).to.equal('o');
                 done();
             });
     });
@@ -147,8 +148,8 @@ describe('Make move |', function () {
             .expect(200)
             .end(function (err, res) {
                 var b = res.body;
-                expect(b.winner).to.equal('Cuong');
-                expect(b.status).to.equal('Game Over.');
+                expect(b.winner).to.equal('Huy');
+                expect(b.status).to.equal(config.GameState.END);
                 done();
             });
     });
@@ -160,7 +161,7 @@ describe('Make move |', function () {
             .end(function (err, res) {
                 var b = res.body;
                 expect(b.winner).to.equal('Huy');
-                expect(b.status).to.equal('Game Over.');
+                expect(b.status).to.equal(config.GameState.END);
                 done();
             });
     });
@@ -168,7 +169,7 @@ describe('Make move |', function () {
     it('Player 1 cannot move anymore', function (done) {
         request(app).put('/board/' + boardID)
             .set('X-Player-Token', p1Key)
-            .send({column: 3})
+            .send({column: 3,row: 1})
             .expect(400)
             .end(function (err, res) {
                 expect(res.body.Error).to.equal('Game Over. Cannot move anymore!');

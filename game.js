@@ -10,3 +10,6 @@ module.exports.makeBoard = function (columns,rows) {
     }
     return board;
 }
+module.exports.checkWinner = function (board) {
+    return true
+}

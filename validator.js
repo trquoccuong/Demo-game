@@ -32,9 +32,6 @@ module.exports = function (app) {
             if (!req.body.column || !req.body.row) {
                 return sendError(res, 'Move where? Missing column and row');
             }
-            if (( req.body.column < 1 && req.body.column > MIN_COLUMNS) || (req.body.row < 1 && req.body.row > MIN_ROWS)) {
-                return sendError(res, 'Bad move.');
-            }
             next();
         },
         token: function (req, res, next) {
