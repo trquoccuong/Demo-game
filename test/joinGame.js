@@ -21,7 +21,7 @@ describe('Create and join new game | ', function () {
     });
     it("should not able to join a game if none exists", function (done) {
         request(app).post('/join')
-            .send({name : 'huy'})
+            .send({name : 'Huy'})
             .expect(200)
             .end(function (err,res) {
                 expect(res.body.Error).to.equal("No games to join!");
@@ -38,7 +38,7 @@ describe('Create and join new game | ', function () {
     });
     it('should join the game on the queue', function (done) {
         request(app).post('/join')
-            .send({name: "huy"})
+            .send({name: "Huy"})
             .expect(200)
             .end(function(err,res){
                 var b = res.body;
@@ -46,7 +46,7 @@ describe('Create and join new game | ', function () {
                 expect(b.p1Key).to.be.undefined;
                 expect(b.p1Name).to.be.a('string').and.equal('Cuong');
                 expect(b.p2Key).to.be.a('string');
-                expect(b.p2Name).to.be.a('string').and.equal('huy');
+                expect(b.p2Name).to.be.a('string').and.equal('Huy');
                 expect(b.turn).to.be.a('number').and.equal(1);
                 expect(b.rows).to.be.a('number');
                 expect(b.columns).to.be.a('number');
